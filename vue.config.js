@@ -5,10 +5,6 @@ const merge = require('lodash.merge');
 
 const TARGET_NODE = process.env.WEBPACK_TARGET === 'node';
 
-const createApiFile = TARGET_NODE
-  ? './create-api-server.js'
-  : './create-api-client.js';
-
 const target = TARGET_NODE
   ? 'server'
   : 'client';
@@ -44,11 +40,6 @@ module.exports = {
     },
     optimization: {
       splitChunks: undefined
-    },
-    resolve: {
-      alias: {
-        'create-api': createApiFile
-      }
     }
   }),
   chainWebpack: config => {
