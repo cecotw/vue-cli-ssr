@@ -9,6 +9,8 @@ const target = TARGET_NODE
   ? 'server'
   : 'client';
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 module.exports = {
   devServer: {
     headers: {
@@ -16,7 +18,7 @@ module.exports = {
     }
   },
   css: {
-    extract: process.env.NODE_ENV === 'production'
+    extract: isProduction
   },
   configureWebpack: () => ({
     entry: `./src/entry-${target}`,
@@ -30,13 +32,13 @@ module.exports = {
     externals: TARGET_NODE ? nodeExternals({
       whitelist: /\.css$/
     }) : undefined,
-    output: {
+    output: isProduction ? {
+      libraryTarget: TARGET_NODE ? 'commonjs2' : undefined
+    } : {
       filename: '[name].js',
       chunkFilename: 'js/[id].[chunkhash].js',
       publicPath: '/',
-      libraryTarget: TARGET_NODE
-        ? 'commonjs2'
-        : undefined
+      libraryTarget: TARGET_NODE ? 'commonjs2' : undefined
     },
     optimization: {
       splitChunks: undefined
